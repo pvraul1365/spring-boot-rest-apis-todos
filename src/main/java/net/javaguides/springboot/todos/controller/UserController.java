@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import net.javaguides.springboot.todos.entity.User;
 import net.javaguides.springboot.todos.response.UserResponse;
 import net.javaguides.springboot.todos.service.UserService;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -32,6 +33,12 @@ public class UserController {
     public UserResponse getUserInfo() {
         log.info("🌐- UserController.getUserInfo() called");
         return userService.getUserInfo();
+    }
+
+    @DeleteMapping
+    public void deleteUser() {
+        log.info("🌐️- UserController.deleteUser() called");
+        userService.deleteUser();
     }
 
 }
