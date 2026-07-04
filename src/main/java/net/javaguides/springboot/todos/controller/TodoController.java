@@ -3,14 +3,20 @@ package net.javaguides.springboot.todos.controller;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Min;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.javaguides.springboot.todos.request.TodoRequest;
 import net.javaguides.springboot.todos.response.TodoResponse;
 import net.javaguides.springboot.todos.service.TodoService;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.Mapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -43,4 +49,30 @@ public class TodoController {
         return todoService.createTodo(todoRequest);
     }
 
+    @Operation(summary = "Get all todos for user", description = "Retrieves all todos for the authenticated user")
+    @ResponseStatus(HttpStatus.OK)
+    @GetMapping
+    public List<TodoResponse> getAllTodos() {
+        log.info("🌐️- Retrieving all todos via controller");
+
+        return todoService.getAllTodos();
+    }
+
+    @Operation(summary = "Update todo completion status", description = "Update todo completion status for the authenticated user")
+    @ResponseStatus(HttpStatus.OK)
+    @PutMapping("/{id}")
+    public TodoResponse toggleTodoCompletion(@PathVariable @Min(1) final long id) {
+        log.info("🌐️- Toggling completion status for todo via controller with ID: {}", id);
+
+        return todoService.toggleTodoCompletion(id);
+    }
+
+    @Operation(summary = "Delete a todo", description = "Deletes a todo for the authenticated user")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @DeleteMapping("/{id}")
+    public void deleteTodo(@PathVariable @Min(1) final long id) {
+        log.info("🌐️- Deleting todo via controller with ID: {}", id);
+        
+        todoService.deleteTodo(id);
+    }
 }
