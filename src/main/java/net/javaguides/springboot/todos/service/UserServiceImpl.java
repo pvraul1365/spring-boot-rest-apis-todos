@@ -74,14 +74,17 @@ public class UserServiceImpl implements UserService {
         final User user = findAuthenticatedUser.getAuthenticatedUser();
 
         if (!this.isOldPasswordCorrect(user.getPassword(), passwordUpdateRequest.getOldPassword())) {
+            log.error("❌ - UserServiceImpl.updatePassword() - Old password is incorrect for user: {}", user.getEmail());
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Old password is incorrect");
         }
 
         if (!this.isNewPasswordConfirmed(passwordUpdateRequest.getNewPassword(), passwordUpdateRequest.getConfirmNewPassword())) {
+            log.error("❌ - UserServiceImpl.updatePassword() - New password and confirm new password do not match for user: {}", user.getEmail());
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "New password and confirm new password do not match");
         }
 
         if (!this.isNewPasswordDifferent(passwordUpdateRequest.getOldPassword(), passwordUpdateRequest.getNewPassword())) {
+            log.error("❌ - UserServiceImpl.updatePassword() - New password must be different from the old password for user: {}", user.getEmail());
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "New password must be different from the old password");
         }
 
