@@ -1,6 +1,7 @@
 package net.javaguides.springboot.todos.service;
 
 import java.util.List;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.javaguides.springboot.todos.entity.Todo;
@@ -9,8 +10,10 @@ import net.javaguides.springboot.todos.repository.TodoRepository;
 import net.javaguides.springboot.todos.request.TodoRequest;
 import net.javaguides.springboot.todos.response.TodoResponse;
 import net.javaguides.springboot.todos.util.FindAuthenticatedUser;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
 
 /**
  * TodoServiceImpl
@@ -65,6 +68,27 @@ public class TodoServiceImpl implements TodoService {
         log.info("📋 - Retrieved {} todos for user: {}", todoResponses.size(), currentUser.getUsername());
 
         return todoResponses;
+    }
+
+    @Transactional
+    @Override
+    public TodoResponse toggleTodoCompletion(final long id) {
+        log.info("🔄 - Toggling completion status for todo with ID: {}", id);
+
+        final User currentUser = findAuthenticatedUser.getAuthenticatedUser();
+
+        Optional<Todo> todo = this.todoRepository.findByIdAndOwner(id, currentUser);
+
+        if (todo.isEmpty()) {
+            log.warn("⚠️ - Todo with ID {} not found for user: {}", id, currentUser.getUsername());
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Todo not found");
+        }
+
+        todo.get().setCompleted(!todo.get().isCompleted());
+        Todo updatedTodo = this.todoRepository.save(todo.get());
+        log.info("✅ - Todo with ID {} completion status toggled to: {}", id, updatedTodo.isCompleted());
+
+        return convertToTodoResponse(updatedTodo);
     }
 
     private TodoResponse convertToTodoResponse(final Todo todo) {
