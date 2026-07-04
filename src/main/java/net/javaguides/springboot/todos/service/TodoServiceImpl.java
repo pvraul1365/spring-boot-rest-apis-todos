@@ -42,7 +42,6 @@ public class TodoServiceImpl implements TodoService {
                 .build();
 
         final Todo savedTodo = todoRepository.save(todo);
-        log.info("🗄️ - Todo created successfully: {}", savedTodo);
 
         final TodoResponse todoResponse = TodoResponse.builder()
                 .id(savedTodo.getId())
@@ -51,6 +50,7 @@ public class TodoServiceImpl implements TodoService {
                 .priority(savedTodo.getPriority())
                 .completed(savedTodo.isCompleted())
                 .build();
+        log.info("🗄️ - Todo created successfully: {}", todoResponse);
 
         return todoResponse;
     }
