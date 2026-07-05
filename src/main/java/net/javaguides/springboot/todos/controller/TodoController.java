@@ -72,7 +72,7 @@ public class TodoController {
     @DeleteMapping("/{id}")
     public void deleteTodo(@PathVariable @Min(1) final long id) {
         log.info("🌐️- Deleting todo via controller with ID: {}", id);
-        
+
         todoService.deleteTodo(id);
     }
 }
