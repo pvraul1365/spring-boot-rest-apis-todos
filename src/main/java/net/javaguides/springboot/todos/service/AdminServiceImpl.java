@@ -60,10 +60,27 @@ public class AdminServiceImpl implements AdminService {
         user.get().setAuthorities(authorities);
 
         User savedUser = this.userRepository.save(user.get());
-
         log.info("✅ - User with id: {} promoted to admin successfully", id);
 
         return this.convertToUserResponse(savedUser);
+    }
+
+    @Override
+    @Transactional
+    public void deleteNonAdminUser(final long id) {
+        log.info("📤 - AdminServiceImpl.deleteNonAdminUser() called with id: {}", id);
+
+        Optional<User> user = this.userRepository.findById(id);
+
+        if (user.isEmpty() || user.get().getAuthorities()
+                .stream()
+                .anyMatch(auth -> "ROLE_ADMIN".equals(auth.getAuthority()))) {
+            log.warn("⚠️ - User with id: {} not found or is an admin", id);
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "User not found or is an admin");
+        }
+
+        this.userRepository.deleteById(user.get().getId());
+        log.info("✅ - User with id: {} deleted successfully", user.get().getId());
     }
 
     private UserResponse convertToUserResponse(User user) {
