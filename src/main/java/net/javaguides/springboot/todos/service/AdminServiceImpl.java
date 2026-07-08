@@ -45,7 +45,7 @@ public class AdminServiceImpl implements AdminService {
     public UserResponse promoteToAdmin(final long id) {
         log.info("📤 - AdminServiceImpl.promoteToAdmin() called with id: {}", id);
 
-        Optional<User> user = this.userRepository.findById(id);
+        Optional<User> user = this.userRepository.findById(String.valueOf(id));
 
         if (user.isEmpty() || user.get().getAuthorities()
                 .stream()
@@ -70,7 +70,7 @@ public class AdminServiceImpl implements AdminService {
     public void deleteNonAdminUser(final long id) {
         log.info("📤 - AdminServiceImpl.deleteNonAdminUser() called with id: {}", id);
 
-        Optional<User> user = this.userRepository.findById(id);
+        Optional<User> user = this.userRepository.findById(String.valueOf(id));
 
         if (user.isEmpty() || user.get().getAuthorities()
                 .stream()

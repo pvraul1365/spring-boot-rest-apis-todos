@@ -75,7 +75,6 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
     private User buildNewUser(final RegisterRequest input) {
         User user = User.builder()
-                .id(0)
                 .firstName(input.getFirstName())
                 .lastName(input.getLastName())
                 .email(input.getEmail())

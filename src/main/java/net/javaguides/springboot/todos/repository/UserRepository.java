@@ -2,13 +2,13 @@ package net.javaguides.springboot.todos.repository;
 
 import java.util.Optional;
 import net.javaguides.springboot.todos.entity.User;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.mongodb.repository.MongoRepository;
+import org.springframework.data.mongodb.repository.Query;
 
-public interface UserRepository extends CrudRepository<User, Long> {
+public interface UserRepository extends MongoRepository<User, String> {
 
     Optional<User> findByEmail(String email);
 
-    @Query("SELECT COUNT(u) FROM User u JOIN u.authorities a WHERE a.authority = 'ROLE_ADMIN'")
+    @Query("{ 'authorities.authority': 'ROLE_ADMIN' }")
     long countAdminUsers();
 }

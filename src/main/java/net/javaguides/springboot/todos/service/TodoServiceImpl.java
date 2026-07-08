@@ -77,7 +77,7 @@ public class TodoServiceImpl implements TodoService {
 
         final User currentUser = findAuthenticatedUser.getAuthenticatedUser();
 
-        Optional<Todo> todo = this.todoRepository.findByIdAndOwner(id, currentUser);
+        Optional<Todo> todo = this.todoRepository.findByIdAndOwner(String.valueOf(id), currentUser);
 
         if (todo.isEmpty()) {
             log.warn("⚠️ - Todo with ID {} not found for user: {}", id, currentUser.getUsername());
@@ -98,7 +98,7 @@ public class TodoServiceImpl implements TodoService {
 
         final User currentUser = findAuthenticatedUser.getAuthenticatedUser();
 
-        Optional<Todo> todo = this.todoRepository.findByIdAndOwner(id, currentUser);
+        Optional<Todo> todo = this.todoRepository.findByIdAndOwner(String.valueOf(id), currentUser);
 
         if (todo.isEmpty()) {
             log.warn("⚠️ - Todo with ID {} not found for user: {}", id, currentUser.getUsername());

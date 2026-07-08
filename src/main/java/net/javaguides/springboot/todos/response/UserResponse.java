@@ -22,7 +22,7 @@ import net.javaguides.springboot.todos.entity.Authority;
 @Builder
 public class UserResponse {
 
-    private long id;
+    private String id;
     private String fullName;
     private String email;
     private List<Authority> authorities;

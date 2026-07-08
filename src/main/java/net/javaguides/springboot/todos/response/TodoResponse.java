@@ -20,7 +20,7 @@ import lombok.NoArgsConstructor;
 @Builder
 public class TodoResponse {
 
-    private long id;
+    private String id;
     private String title;
     private String description;
     private int priority;
